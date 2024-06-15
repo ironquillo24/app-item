@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+  @apply bg-gradient-to-b from-white to-emerald-900;
+}
+ */
+
+body {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 54%,
+    rgba(12, 94, 56, 1) 100%
+  );
+  margin: 0;
+  height: 100%;
+  overflow: auto;
+}

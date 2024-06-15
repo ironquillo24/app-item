@@ -1,0 +1,3 @@
+.table-grid {
+  @apply grid grid-cols-8  text-center;
+}
