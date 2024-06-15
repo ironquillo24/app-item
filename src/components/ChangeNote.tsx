@@ -13,6 +13,7 @@ export type ChangeNoteProps = {
 };
 
 const ChangeNote = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
+  console.log(isInputActive.state);
   return (
     <>
       {isInputActive.state ? (
