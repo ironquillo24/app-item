@@ -6,16 +6,18 @@ import RemoveItemButton from "../buttons/RemoveItemButton";
 import TableSkeleton from "./TableSkeleton";
 import { GridLoader } from "react-spinners";
 import RemoveItemModal from "../RemoveItemModal";
-import { useRef } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ChangeNote from "../ChangeNote";
-import { type ChangeNoteProps } from "../ChangeNote";
 
-const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
+const MyTable = () => {
   const { data, isError, error } = useGetItems();
   const updateItem = useUpdateItem();
   const [idForDelete, setIdForDelete] = useState<string>("");
   const removeItemModalRef = useRef<HTMLDialogElement>(null);
+  const [notifyChange, setNotifyChange] = useState({
+    notify: false,
+    isNotified: false,
+  });
 
   // query data is undefined, return loading state
   if (!data) {
@@ -49,8 +51,23 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
     updateItem.mutate({
       id: String(e.target.parentElement?.id),
       key: keyName,
-      value: e.target.value,
+      value:
+        keyName === "category" || keyName === "name" || keyName === "option"
+          ? e.target.value.trim()
+          : Number(e.target.value),
     });
+
+    //notify user when applying changes to table only once per session
+    if (!notifyChange.notify && !notifyChange.isNotified) {
+      setNotifyChange({ notify: true, isNotified: true });
+    }
+  };
+
+  //remove focus on enter key
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.currentTarget.blur();
+    }
   };
 
   return (
@@ -80,6 +97,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     defaultValue={item.category ?? ""}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.category + "_category" + item.id}
                   />
                   <input
@@ -88,6 +106,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     defaultValue={item.name ?? ""}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.name + "_name" + item.id}
                   />
                   <input
@@ -96,6 +115,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     defaultValue={item.option ?? ""}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.option + "_option" + item.id}
                   />
 
@@ -106,6 +126,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     min={0}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.cost + "_cost" + item.id}
                   />
                   <input
@@ -115,6 +136,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     min={0}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.price + "_price" + item.id}
                   />
                   <input
@@ -124,6 +146,7 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
                     min={0}
                     className="focus:bg-green-200"
                     onBlur={onInputBlur}
+                    onKeyDown={onInputKeyDown}
                     key={item.stocks + "_stocks" + item.id}
                   />
                   <div>
@@ -143,8 +166,8 @@ const MyTable = ({ isInputActive, setIsInputActive }: ChangeNoteProps) => {
         <div>No. of rows: {data.length}</div>
 
         <ChangeNote
-          isInputActive={isInputActive}
-          setIsInputActive={setIsInputActive}
+          notifyChange={notifyChange}
+          setNotifyChange={setNotifyChange}
         />
       </div>
       <RemoveItemModal

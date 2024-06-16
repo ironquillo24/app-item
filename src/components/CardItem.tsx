@@ -21,10 +21,19 @@ const CardItem = ({ item }: { item: TItems }) => {
     updateItem.mutate({
       id: item.id,
       key: keyName,
-      value: e.target.value,
+      value:
+        keyName === "category" || keyName === "name" || keyName === "option"
+          ? e.target.value.trim()
+          : Number(e.target.value),
     });
   };
 
+  //remove focus on enter key
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.currentTarget.blur();
+    }
+  };
   return (
     <div className="w-[300px] h-[170px] rounded-lg shadow-lg bg-white hover:-translate-y-1 hover:translate-x-1 hover:shadow-2xl group  ">
       <div className="flex relative items-center justify-center *:text-center font-medium text-xl py-1 mb-2 shadow-md bg-slate-100">
@@ -36,6 +45,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.category || ""}
             className="border border-slate-500 rounded-md bg-white mx-8"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
         <button type="button" onClick={onEdit} className="flex items-center">
@@ -56,6 +66,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.name || ""}
             className="border border-slate-500 rounded-md bg-white"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
 
@@ -68,6 +79,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.option || ""}
             className="border border-slate-500 rounded-md bg-white"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
 
@@ -80,6 +92,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.cost || ""}
             className="border border-slate-500 rounded-md bg-white"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
 
@@ -92,6 +105,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.price || ""}
             className="border border-slate-500 rounded-md bg-white"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
 
@@ -104,6 +118,7 @@ const CardItem = ({ item }: { item: TItems }) => {
             defaultValue={item.stocks || ""}
             className="border border-slate-500 rounded-md bg-white"
             onBlur={onInputBlur}
+            onKeyDown={onInputKeyDown}
           />
         )}
       </div>
