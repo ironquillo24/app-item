@@ -1,5 +1,5 @@
 import AddItemModal from "../components/AddItemModal";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Tabs, ConfigProvider } from "antd";
 import TableView from "../components/TableView";
 import CardView from "../components/CardView";
@@ -7,6 +7,7 @@ import { useGetItems } from "../shared/hooks/queryHooks";
 
 function Home() {
   const addItemModelRef = useRef<HTMLDialogElement>(null);
+  const [catSort, setCatSort] = useState({ isSorted: false, goSort: false });
   const { data } = useGetItems();
 
   const openAddItemModal = () => {
@@ -35,15 +36,22 @@ function Home() {
               label: "Table View",
               children: (
                 <TableView
+                  catSort={catSort}
+                  setCatSort={setCatSort}
                   openAddItemModal={openAddItemModal}
-                  key={data?.toString()}
                 />
               ),
             },
             {
               key: "2",
               label: "Card View",
-              children: <CardView openAddItemModal={openAddItemModal} />,
+              children: (
+                <CardView
+                  catSort={catSort}
+                  setCatSort={setCatSort}
+                  openAddItemModal={openAddItemModal}
+                />
+              ),
             },
           ]}
         />

@@ -1,29 +1,63 @@
 import { useGetItems } from "../shared/hooks/queryHooks";
+import { useState, useEffect } from "react";
 import CardItem from "./CardItem";
 import AddItemButton from "./buttons/AddItemButton";
+import { ArrowDownAZ, BadgeInfo } from "lucide-react";
+import { type TItems } from "../shared/types";
 
-const CardView = ({ openAddItemModal }: { openAddItemModal: () => void }) => {
+type CardViewProps = {
+  openAddItemModal: () => void;
+  catSort: { isSorted: boolean; goSort: boolean };
+  setCatSort: React.Dispatch<
+    React.SetStateAction<{
+      isSorted: boolean;
+      goSort: boolean;
+    }>
+  >;
+};
+const CardView = ({ openAddItemModal, catSort, setCatSort }: CardViewProps) => {
   const { data } = useGetItems();
 
-  const sortedData = data?.slice().sort((a, b) => {
-    if (a.category === null || b.category === null) {
-      return 0;
+  const [sortedData, setSortedData] = useState<TItems[] | undefined>(data);
+
+  //sort data
+  useEffect(() => {
+    if (data) {
+      if (!catSort.isSorted) {
+        const tempData = data.slice();
+        sortData(tempData);
+        setSortedData(tempData);
+        setCatSort({ ...catSort, isSorted: true });
+      }
     }
-    const aCategory = a?.category?.toLowerCase();
-    const bCategory = b?.category?.toLowerCase();
-    if (aCategory < bCategory) {
-      return -1;
-    }
-    if (aCategory > bCategory) {
-      return 1;
-    }
-    return 0;
-  });
+  }, [data, catSort.goSort]);
 
   return (
     <div>
-      <div className="flex justify-between shadow-md py-2">
-        <div></div>
+      <div className="flex justify-between items-center shadow-md py-2">
+        <div className="flex">
+          <button
+            type="button"
+            onClick={() =>
+              setCatSort({ isSorted: false, goSort: !catSort.goSort })
+            }
+            className="flex ml-2 hover:-translate-y-0.5"
+          >
+            <ArrowDownAZ />
+            <span>&nbsp;sort</span>
+          </button>
+          <div className="flex group">
+            <BadgeInfo
+              className="ml-2 translate-y-0.5"
+              color="#4046f2"
+              size={18}
+            />
+            <span className="ml-2 border border-slate-400 p-1 -translate-y-1 rounded-lg scale-0 group-hover:scale-100 transition-all duration-300">
+              sort by category
+            </span>
+          </div>
+        </div>
+
         <div className="mr-2">
           <AddItemButton onOpenAddItem={openAddItemModal} data={data} />
         </div>
@@ -44,3 +78,20 @@ const CardView = ({ openAddItemModal }: { openAddItemModal: () => void }) => {
 };
 
 export default CardView;
+
+function sortData(data: TItems[] | undefined) {
+  data?.sort((a, b) => {
+    if (a.category === null || b.category === null) {
+      return 0;
+    }
+    const aCategory = a?.category?.toLowerCase();
+    const bCategory = b?.category?.toLowerCase();
+    if (aCategory < bCategory) {
+      return -1;
+    }
+    if (aCategory > bCategory) {
+      return 1;
+    }
+    return 0;
+  });
+}

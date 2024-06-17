@@ -9,7 +9,15 @@ import RemoveItemModal from "../RemoveItemModal";
 import { useRef, useState } from "react";
 import ChangeNote from "../ChangeNote";
 
-const MyTable = () => {
+type MyTableProps = {
+  setCatSort: React.Dispatch<
+    React.SetStateAction<{
+      isSorted: boolean;
+      goSort: boolean;
+    }>
+  >;
+};
+const MyTable = ({ setCatSort }: MyTableProps) => {
   const { data, isError, error } = useGetItems();
   const updateItem = useUpdateItem();
   const [idForDelete, setIdForDelete] = useState<string>("");
@@ -56,6 +64,7 @@ const MyTable = () => {
           ? e.target.value.trim()
           : Number(e.target.value),
     });
+    setCatSort({ isSorted: false, goSort: false });
 
     //notify user when applying changes to table only once per session
     if (!notifyChange.notify && !notifyChange.isNotified) {
@@ -72,7 +81,7 @@ const MyTable = () => {
 
   return (
     <div>
-      <div className=" border rounded border-slate-800 m-0 bg-white bg-opacity-20 w-[400px] h-[330px] sm:w-[600px] md:h-[480px] md:w-[700px] lg:w-[910px] overflow-auto">
+      <div className=" border rounded border-slate-800 m-0 bg-white bg-opacity-20 w-[400px] h-[330px] sm:w-[600px]  md:w-[700px] lg:h-[480px] xl:w-[910px] overflow-auto">
         <div className="min-w-[900px]">
           <div className="table-grid font-bold py-2 border-b-2 border-emerald-500 bg-emerald-500 text-white">
             {tableHeader.map((column, index) => (
