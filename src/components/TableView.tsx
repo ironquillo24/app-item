@@ -2,6 +2,7 @@ import MyTable from "./mytable/MyTable.tsx";
 import AddItemButton from "./buttons/AddItemButton";
 import { useGetItems } from "../shared/hooks/queryHooks";
 import LowOnStock from "./LowOnStock.tsx";
+import BestSeller from "./BestSeller.tsx";
 
 type TableViewProps = {
   openAddItemModal: () => void;
@@ -27,12 +28,15 @@ const TableView = ({ openAddItemModal, setCatSort }: TableViewProps) => {
           <MyTable setCatSort={setCatSort} />
         </div>
       </div>
-      <section className="flex justify-center items-center self-center  ">
+      <section className="flex gap-4 flex-col sm:flex-row lg:flex-col  justify-center items-center self-center  ">
         {data === undefined || data?.length < 1 ? (
-          <div>you have no items</div>
+          <div></div>
         ) : (
           <LowOnStock data={data} />
         )}
+        <div>
+          <BestSeller />
+        </div>
       </section>
     </div>
   );
