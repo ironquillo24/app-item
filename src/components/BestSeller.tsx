@@ -11,9 +11,9 @@ import {
 
 const BestSeller = () => {
   const data = [
-    { name: "Iced Coffee", sold: 103 },
-    { name: "Fries", sold: 99 },
-    { name: "Carbonara", sold: 82 },
+    { name: "Iced Coffee", sold: 103, revenue: 13000 },
+    { name: "Fries", sold: 99, revenue: 7942 },
+    { name: "Carbonara", sold: 84, revenue: 10211 },
     { name: "My Burger", sold: 78 },
     { name: "Caesar Salad", sold: 53 },
   ];
@@ -24,7 +24,7 @@ const BestSeller = () => {
           Best Sellers
         </h2>
       </div>
-      <div className="  w-[300px] h-[20px] lg:mt-0  min-h-[120px] rounded-md lg:h-[260px] shadow-lg bg-white bg-opacity-50">
+      <div className="  w-[300px] h-[20px] lg:mt-0  min-h-[120px] rounded-md lg:h-[200px] shadow-lg bg-white bg-opacity-50">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width={50}
