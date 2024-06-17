@@ -1,16 +1,15 @@
 import { type TItems } from "../../shared/types";
-type AddItemButtonProps = {
-  onOpenAddItem: () => void;
-  data: TItems[] | undefined;
-};
+import { homeContext } from "../../pages/Home";
+import { useContext } from "react";
 
-const AddItemButton = ({ onOpenAddItem, data }: AddItemButtonProps) => {
+const AddItemButton = ({ data }: { data: TItems[] | undefined }) => {
+  const { openAddItemModal } = useContext(homeContext);
   const isData = data?.length === 0;
   return (
     <button
       type="button"
       className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 relative"
-      onClick={onOpenAddItem}
+      onClick={openAddItemModal}
     >
       Add Item
       {isData && (
