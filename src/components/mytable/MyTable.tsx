@@ -6,18 +6,11 @@ import RemoveItemButton from "../buttons/RemoveItemButton";
 import TableSkeleton from "./TableSkeleton";
 import { GridLoader } from "react-spinners";
 import RemoveItemModal from "../RemoveItemModal";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import ChangeNote from "../ChangeNote";
+import { homeContext } from "../../pages/Home";
 
-type MyTableProps = {
-  setCatSort: React.Dispatch<
-    React.SetStateAction<{
-      isSorted: boolean;
-      goSort: boolean;
-    }>
-  >;
-};
-const MyTable = ({ setCatSort }: MyTableProps) => {
+const MyTable = () => {
   const { data, isError, error } = useGetItems();
   const updateItem = useUpdateItem();
   const [idForDelete, setIdForDelete] = useState<string>("");
@@ -26,6 +19,7 @@ const MyTable = ({ setCatSort }: MyTableProps) => {
     notify: false,
     isNotified: false,
   });
+  const { setCatSort } = useContext(homeContext);
 
   // query data is undefined, return loading state
   if (!data) {

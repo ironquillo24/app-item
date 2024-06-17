@@ -3,18 +3,7 @@ import AddItemButton from "./buttons/AddItemButton";
 import { useGetItems } from "../shared/hooks/queryHooks";
 import LowOnStock from "./LowOnStock.tsx";
 import BestSeller from "./BestSeller.tsx";
-
-type TableViewProps = {
-  openAddItemModal: () => void;
-  setCatSort: React.Dispatch<
-    React.SetStateAction<{
-      isSorted: boolean;
-      goSort: boolean;
-    }>
-  >;
-};
-
-const TableView = ({ openAddItemModal, setCatSort }: TableViewProps) => {
+const TableView = () => {
   const { data } = useGetItems();
 
   return (
@@ -22,10 +11,10 @@ const TableView = ({ openAddItemModal, setCatSort }: TableViewProps) => {
       <div className="flex flex-col  ">
         <div className="flex justify-between mb-2">
           <div></div>
-          <AddItemButton onOpenAddItem={openAddItemModal} data={data} />
+          <AddItemButton data={data} />
         </div>
         <div className="relative">
-          <MyTable setCatSort={setCatSort} />
+          <MyTable />
         </div>
       </div>
       <section className="flex gap-4 flex-col sm:flex-row lg:flex-col  justify-center items-center self-center  ">

@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { homeContext } from "../pages/Home";
 import { useDeleteItem } from "../shared/hooks/mutationHooks";
 
 type RemoveItemModalProps = {
@@ -7,16 +9,28 @@ type RemoveItemModalProps = {
 
 const RemoveItemModal = ({ modalRef, idForDelete }: RemoveItemModalProps) => {
   const deleteItem = useDeleteItem();
+  const { setIsMutating, setCatSort, isMutating } = useContext(homeContext);
   const onCancel = () => {
     modalRef.current?.close();
   };
 
-  const onConfirm = (e: React.FormEvent<HTMLFormElement>) => {
+  const onConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    deleteItem.mutate(idForDelete);
-    modalRef.current?.close();
-  };
 
+    try {
+      setIsMutating(true);
+      await deleteItem.mutate(idForDelete);
+      setIsMutating(false);
+      setCatSort({ isSorted: false, goSort: false });
+      modalRef.current?.close();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      } else {
+        console.error("Something went wrong");
+      }
+    }
+  };
   return (
     <dialog ref={modalRef} className="border rounded-lg shadow-lg p-4">
       <form onSubmit={onConfirm}>
@@ -29,6 +43,7 @@ const RemoveItemModal = ({ modalRef, idForDelete }: RemoveItemModalProps) => {
         <div className="flex justify-center gap-12 mb-4">
           <button
             type="submit"
+            disabled={isMutating}
             className="py-2 px-4 min-w-32 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700"
           >
             delete anyway

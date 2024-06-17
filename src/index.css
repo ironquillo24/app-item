@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  @apply bg-gradient-to-b from-white to-emerald-900;
-}
- */
-
 body {
   background: rgb(255, 255, 255);
   background: linear-gradient(

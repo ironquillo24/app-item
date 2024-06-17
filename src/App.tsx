@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./pages/Home.tsx";
 import RootLayout from "./components/RootLayout.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Try from "./pages/Try";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 0, refetchInterval: 0 } },
@@ -15,6 +16,7 @@ function App() {
       <RootLayout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="try" element={<Try />} />
           <Route path="/*" element={<Home />} />
         </Routes>
       </RootLayout>

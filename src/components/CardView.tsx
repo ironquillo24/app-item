@@ -1,21 +1,13 @@
 import { useGetItems } from "../shared/hooks/queryHooks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import CardItem from "./CardItem";
 import AddItemButton from "./buttons/AddItemButton";
 import { ArrowDownAZ, BadgeInfo } from "lucide-react";
 import { type TItems } from "../shared/types";
+import { homeContext } from "../pages/Home";
 
-type CardViewProps = {
-  openAddItemModal: () => void;
-  catSort: { isSorted: boolean; goSort: boolean };
-  setCatSort: React.Dispatch<
-    React.SetStateAction<{
-      isSorted: boolean;
-      goSort: boolean;
-    }>
-  >;
-};
-const CardView = ({ openAddItemModal, catSort, setCatSort }: CardViewProps) => {
+const CardView = () => {
+  const { catSort, setCatSort } = useContext(homeContext);
   const { data } = useGetItems();
 
   const [sortedData, setSortedData] = useState<TItems[] | undefined>(data);
@@ -59,7 +51,7 @@ const CardView = ({ openAddItemModal, catSort, setCatSort }: CardViewProps) => {
         </div>
 
         <div className="mr-2">
-          <AddItemButton onOpenAddItem={openAddItemModal} data={data} />
+          <AddItemButton data={data} />
         </div>
       </div>
 

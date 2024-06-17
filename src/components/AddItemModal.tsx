@@ -1,13 +1,15 @@
 import defaultItem from "../shared/defaultItem";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { usePostItem } from "../shared/hooks/mutationHooks";
 import { Item } from "../shared/types";
+import { homeContext } from "../pages/Home";
 type AddItemModalProps = {
   modalRef: React.RefObject<HTMLDialogElement>;
 };
 const AddItemModal = ({ modalRef }: AddItemModalProps) => {
   const [item, SetItem] = useState<Item>(defaultItem);
   const [isEmpty, setIsEmpty] = useState(false);
+  const { setIsMutating, setCatSort, isMutating } = useContext(homeContext);
   const addItem = usePostItem();
 
   const onCancel = () => {
@@ -15,14 +17,26 @@ const AddItemModal = ({ modalRef }: AddItemModalProps) => {
     setIsEmpty(false);
   };
 
-  const onAdd = (e: React.FormEvent<HTMLFormElement>) => {
+  const onAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (item === defaultItem) {
       setIsEmpty(true);
       return;
     }
+    try {
+      setIsMutating(true);
+      const response = await addItem.mutateAsync(item);
+      console.log(response);
+      setIsMutating(false);
+      setCatSort({ isSorted: false, goSort: false });
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      } else {
+        console.error("Something went wrong");
+      }
+    }
 
-    addItem.mutate(item);
     setIsEmpty(false);
     SetItem(defaultItem);
     modalRef.current?.close();
@@ -129,6 +143,7 @@ const AddItemModal = ({ modalRef }: AddItemModalProps) => {
           </button>
           <button
             type="button"
+            disabled={isMutating}
             className="py-2 px-4 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-500"
             onClick={onCancel}
           >
